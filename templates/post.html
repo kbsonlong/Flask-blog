@@ -41,11 +41,10 @@
         $(document).ready(function(){
             var a = $("#l").text();
             $("#l").html(a)
-            var txts = $('.l').text();
-            $("#len").html(txts.length)
-            if (txts.length>0){
-                txts=txts.replace(/[\n\r]/g,'<br>')
-                $('.l').html(txts);
+            $("#len").html(a.length)
+            if (a.length>0){
+                a=a.replace(/[\n\r]/g,'<br>')
+                $('.l').html(a);
             }
 
         });
