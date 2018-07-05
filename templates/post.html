@@ -40,7 +40,9 @@
         $(document).ready(function(){
             var a = $("#l").text();
             $("#l").html(a)
+            var txts = $('.l').html();
+            txts=txts.replace(/[\n\r]/g,'<br>')
+            $('.l').html(txts);
         });
     </script>
-    <script type="text/javascript">
 {% endblock %}
