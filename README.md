@@ -1,6 +1,9 @@
 ##下载代码
     git cone 
-    
+
+##安装依赖
+    pip install -r requirements.txt
+        
 ##修改配置
     vim config.py
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:kbsonlong@blog_db:8080/blog'
