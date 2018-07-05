@@ -11,12 +11,10 @@ app = Flask(__name__)
 app.config.from_object(DevConfig)
 bootstrap = Bootstrap(app)
 moment = Moment(app)
+##导入视图
 views = __import__('views')
 
 
-# @app.route('/')
-# def home():
-#     return '<h1>Hello World!</h1>'
 
 if __name__ == '__main__':
     app.run()

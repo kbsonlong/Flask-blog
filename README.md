@@ -14,10 +14,14 @@
     python manage.py db migrate -m "Init DB"
     python manage.py db upgrade
     
+    
+##启动服务
+    python manage.py server
+    
+    ##启动端口默认5000,可以通过命令行配置或者修改manage.py
+    python manage.py server -h 127.0.0.1 -p 5001
+    
 ##修改主机监听端口
 
     vim manage.py
     manager.add_command("server", Server(host='0.0.0.0', port=5000))
-    
-##启动服务
-    python manage.py server
