@@ -41,8 +41,11 @@
             var a = $("#l").text();
             $("#l").html(a)
             var txts = $('.l').text();
-            txts=txts.replace(/[\n\r]/g,'<br>')
-            $('.l').html(txts);
+            if (txts.length>0){
+                txts=txts.replace(/[\n\r]/g,'<br>')
+                $('.l').html(txts);
+            }
+
         });
     </script>
 {% endblock %}
