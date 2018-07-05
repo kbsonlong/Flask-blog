@@ -1,7 +1,13 @@
+# -*- coding: utf-8 -*-
 from flask_script import Manager, Server
 from flask_migrate import Migrate, MigrateCommand
 import main
 import models
+import sys
+from imp import reload
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 # Init manager object via app object
 manager = Manager(main.app)
