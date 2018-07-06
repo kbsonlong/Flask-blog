@@ -8,17 +8,20 @@ from flaskblog import models,create_app
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
+import time
 
 
 # Get the ENV from os_environ
 env = os.environ.get('BLOG_ENV', 'dev')
 # Create thr app instance via Factory Method
 app = create_app('flaskblog.config.%sConfig' % env.capitalize())
-# Init manager object via app object
+# Init manager object via app objects
 
 # Init manager object via app object
 manager = Manager(app)
 migrate = Migrate(app, models.db)
+
+
 
 # Create a new commands: server
 # This command will be run the Flask development_env server

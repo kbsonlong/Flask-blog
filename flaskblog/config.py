@@ -9,7 +9,8 @@ class Config(object):
 
 class ProdConfig(Config):
     """Production config class"""
-    pass
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:kbsonlong@blog_db:8080/blog'
+    HOST="0.0.0.0"
 
 class DevConfig(Config):
     """Development config class"""
