@@ -1,17 +1,24 @@
 # -*- coding: utf-8 -*-
-from flask_script import Manager, Server
-from flask_migrate import Migrate, MigrateCommand
-import main
-import models
-import sys
+import sys,os
 from imp import reload
+
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager, Server
+from flaskblog import models,create_app
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+
+# Get the ENV from os_environ
+env = os.environ.get('BLOG_ENV', 'dev')
+# Create thr app instance via Factory Method
+app = create_app('flaskblog.config.%sConfig' % env.capitalize())
 # Init manager object via app object
-manager = Manager(main.app)
-migrate = Migrate(main.app, models.db)
+
+# Init manager object via app object
+manager = Manager(app)
+migrate = Migrate(app, models.db)
 
 # Create a new commands: server
 # This command will be run the Flask development_env server
@@ -26,7 +33,7 @@ def make_shell_context():
     type: `Dict`
     """
     # 确保有导入 Flask app object，否则启动的 CLI 上下文中仍然没有 app 对象
-    return dict(app=main.app,
+    return dict(app=app,
                 db=models.db,
                 User=models.User,
                 Post=models.Post,

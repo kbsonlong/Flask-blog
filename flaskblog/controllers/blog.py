@@ -1,12 +1,22 @@
 #-*- coding: utf-8 -*-
-
-from flask import render_template,session,redirect,url_for
-from sqlalchemy import func
 from uuid import uuid4
-import datetime
-from froms import NameForm,CommentForm
-from main import app
-from models import db,User,Post,Tag,Comment,posts_tags
+from os import path
+from datetime import datetime
+from flask import render_template, Blueprint
+from sqlalchemy import func
+from flaskblog.models import db, User, Post, Tag, Comment, posts_tags
+from flaskblog.froms import CommentForm
+
+
+
+blog_blueprint = Blueprint(
+    'blog',
+    __name__,
+    # path.pardir ==> ..
+    template_folder=path.join(path.pardir, 'templates', 'blog'),
+    # Prefix of Route URL
+    url_prefix='/blog')
+
 
 def sidebar_data():
     """Set the sidebar function."""
@@ -21,8 +31,8 @@ def sidebar_data():
     ).group_by(Tag).order_by('total DESC').limit(5).all()
     return recent, top_tags
 
-@app.route('/')
-@app.route('/<int:page>',methods=['GET','POST'])
+@blog_blueprint.route('/')
+@blog_blueprint.route('/<int:page>',methods=['GET','POST'])
 def home(page=1):
     """View function for home page"""
 
@@ -32,13 +42,13 @@ def home(page=1):
 
     recent, top_tags = sidebar_data()
 
-    return render_template('home.html',
+    return render_template('blog/home.html',
                            posts=posts,
                            recent=recent,
                            top_tags=top_tags)
 
 
-@app.route('/post/<string:post_id>', methods=('GET', 'POST'))
+@blog_blueprint.route('/post/<string:post_id>', methods=('GET', 'POST'))
 def post(post_id):
     """View function for post page"""
 
@@ -61,7 +71,7 @@ def post(post_id):
     comments = post.comments.order_by(Comment.date.desc()).all()
     recent, top_tags = sidebar_data()
 
-    return render_template('post.html',
+    return render_template('blog/post.html',
                            post=post,
                            tags=tags,
                            comments=comments,
@@ -70,7 +80,7 @@ def post(post_id):
                            top_tags=top_tags)
 
 
-@app.route('/tag/<string:tag_name>')
+@blog_blueprint.route('/tag/<string:tag_name>')
 def tag(tag_name,page=1):
     """View function for tag page"""
 
@@ -78,34 +88,34 @@ def tag(tag_name,page=1):
     posts = tag.posts.order_by(Post.publish_date.desc()).paginate(page, 10)
     recent, top_tags = sidebar_data()
 
-    return render_template('tag.html',
+    return render_template('blog/tag.html',
                            tag=tag,
                            posts=posts,
                            recent=recent,
                            top_tags=top_tags)
 
 
-@app.route('/user/<string:username>')
+@blog_blueprint.route('/user/<string:username>')
 def user(username):
     """View function for user page"""
     user = db.session.query(User).filter_by(username=username).first_or_404()
     posts = user.posts.order_by(Post.publish_date.desc()).all()
     recent, top_tags = sidebar_data()
 
-    return render_template('user.html',
+    return render_template('blog/user.html',
                            user=user,
                            posts=posts,
                            recent=recent,
                            top_tags=top_tags)
 
-# @app.route('/user/<name>')
+# @blog_blueprint.route('/user/<name>')
 # def user(name):
 #     return render_template('user.html', name=name)
 
-@app.errorhandler(404)
+@blog_blueprint.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('blog/404.html'), 404
 
-@app.errorhandler(500)
+@blog_blueprint.errorhandler(500)
 def internal_server_error(e):
-    return render_template('500.html'), 500
+    return render_template('blog/500.html'), 500
